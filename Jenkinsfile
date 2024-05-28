@@ -17,7 +17,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from the Git repository
-                git branch: 'main', url: 'https://github.com/aniljos/jenkins-spring-sample'
+                git branch: 'main', url: 'https://github.com/aniljos/jenkins_spring_boot'
             }
         }
         stage('Build') {
@@ -47,8 +47,8 @@ pipeline {
                 // sh 'scp target/your-app.jar user@remote.server:/path/to/deploy'
 
                 script {
-                       def sourcePath = "${env.WORKSPACE}\\target\\app-services-1.0.0.jar" // Update with your actual JAR file name
-                       def destinationPath = "D:\\Jenkins\\Spring\\builds" // Update with your desired destination path
+                       def sourcePath = "${env.WORKSPACE}\\target\\app-services-1.1.0.jar" // Update with your actual JAR file name
+                       def destinationPath = "D:\Jenkins\27-05-2024\spring-build" // Update with your desired destination path
 
                        // Copy the built JAR file to the destination path
                        bat "copy ${sourcePath} ${destinationPath}"
