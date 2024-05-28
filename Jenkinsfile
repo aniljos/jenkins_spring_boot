@@ -9,13 +9,8 @@ pipeline {
 
     environment {
         // Define any environment variables
-        //DOCKER_IMAGE = 'app-spring-services:latest'
-        IMAGE_NAME = 'spring-app'
-        IMAGE_TAG = 'latest'
-        POSTGRES_DB = 'training'
-        POSTGRES_USER = 'postgres'
-        POSTGRES_PASSWORD = 'sa'
-        SAVE_PATH = 'D:\\Jenkins\\Spring\\docker-images'
+        MAVEN_HOME = tool name: 'maven 3.9.6'
+        PATH = "${MAVEN_HOME}/bin:${env.PATH}"
     }
 
     stages {
@@ -37,29 +32,26 @@ pipeline {
                 bat 'mvn test'
             }
         }
-        stage('Build Docker Image') {
+        stage('Package') {
             steps {
-                script {
-                    // Build Docker image
-                    //bat "docker build -t ${DOCKER_IMAGE} ."
-                    docker.build("${env.IMAGE_NAME}:${env.IMAGE_TAG}")
-                }
+                // Package the application (already done in the build stage, but included here for clarity)
+                bat 'mvn package'
             }
         }
         stage('Deploy') {
             steps {
-                 bat "docker-compose down"
-                 bat "docker-compose up -d"
-                 script {
-                    //def imageTar = "${env.WORKSPACE}\\${DOCKER_IMAGE}.tar"
-                    //bat "docker save -o ${imageTar} ${env.DOCKER_IMAGE}"
-                    //bat "move ${imageTar} ${env.SAVE_PATH}"
+                // Deploy the application
+                // This step can include copying the artifact to a server, running Docker commands, etc.
+                echo 'Deploying application...'
+                // Example: Copy the JAR file to a remote server
+                // sh 'scp target/your-app.jar user@remote.server:/path/to/deploy'
 
-                    // Save the Docker image to a tar file
-                    bat "docker save -o ${env.IMAGE_NAME}-${env.IMAGE_TAG}.tar ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+                script {
+                       def sourcePath = "${env.WORKSPACE}\\target\\app-services-1.0.0.jar" // Update with your actual JAR file name
+                       def destinationPath = "D:\\Jenkins\\Spring\\builds" // Update with your desired destination path
 
-                    // Copy the tar file to the desired local path
-                    bat "move ${env.IMAGE_NAME}-${env.IMAGE_TAG}.tar ${env.SAVE_PATH}"
+                       // Copy the built JAR file to the destination path
+                       bat "copy ${sourcePath} ${destinationPath}"
                   }
             }
         }
