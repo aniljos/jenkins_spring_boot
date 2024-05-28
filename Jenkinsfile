@@ -48,7 +48,7 @@ pipeline {
 
                 script {
                        def sourcePath = "${env.WORKSPACE}\\target\\app-services-1.1.0.jar" // Update with your actual JAR file name
-                       def destinationPath = "D:\Jenkins\27-05-2024\spring-build" // Update with your desired destination path
+                       def destinationPath = "D:\\Jenkins\\27-05-2024\\spring-build" // Update with your desired destination path
 
                        // Copy the built JAR file to the destination path
                        bat "copy ${sourcePath} ${destinationPath}"
